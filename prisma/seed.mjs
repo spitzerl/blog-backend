@@ -9,17 +9,24 @@ const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@example.com';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'changeme';
 
 async function main() {
-  console.log('Running seed script...');
+  console.log('🌱 Exécution du script de seeding...');
+  console.log('📧 Email admin:', ADMIN_EMAIL);
+  console.log('🌍 Environnement:', process.env.NODE_ENV);
 
-  // Create roles
-  const roles = ['admin', 'user'];
-  for (const name of roles) {
-    await prisma.role.upsert({
-      where: { name },
-      update: {},
-      create: { name },
-    });
-    console.log(`Role ensured: ${name}`);
+  try {
+    // Create roles
+    const roles = ['admin', 'user'];
+    for (const name of roles) {
+      await prisma.role.upsert({
+        where: { name },
+        update: {},
+        create: { name },
+      });
+      console.log(`✅ Rôle configuré: ${name}`);
+    }
+  } catch (error) {
+    console.error('❌ Erreur lors de la création des rôles:', error.message);
+    throw error;
   }
 
   // Hash password
