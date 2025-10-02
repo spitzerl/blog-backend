@@ -1,0 +1,45 @@
+{
+  "name": "blog-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "API Backend pour le blog - Express + Prisma",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js",
+    "seed": "node ../prisma/seed.mjs",
+    "docker:build": "docker build -t blog-backend .",
+    "docker:dev": "docker compose up --build",
+    "docker:prod": "docker compose -f docker-compose.prod.yml up --build -d",
+    "docker:stop": "docker compose down",
+    "docker:clean": "docker compose down -v --rmi all",
+    "docker:logs": "docker compose logs -f"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.16.2",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "rate-limiter-flexible": "^8.0.1",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.19",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^20",
+    "prisma": "^6.16.2"
+  },
+  "keywords": [
+    "express",
+    "api",
+    "blog",
+    "prisma",
+    "postgresql"
+  ],
+  "author": "",
+  "license": "MIT"
+}

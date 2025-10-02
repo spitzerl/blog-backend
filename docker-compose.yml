@@ -1,0 +1,41 @@
+services:
+  backend:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://bloguser:password@db:5432/blogdb
+      - JWT_SECRET=dev-jwt-secret-key
+      - JWT_EXPIRES_IN=24h
+      - ADMIN_EMAIL=admin@example.com
+      - ADMIN_PASSWORD=admin123
+      - PORT=3001
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=bloguser
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=blogdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
