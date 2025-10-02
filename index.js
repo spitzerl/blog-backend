@@ -70,7 +70,7 @@ process.on('SIGINT', async () => {
 });
 
 const PORT = process.env.BACKEND_PORT || 3001;
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Backend lancé sur http://localhost:${PORT}`);
   console.log(`📊 Health check disponible sur http://localhost:${PORT}/health`);
 });
