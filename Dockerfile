@@ -9,9 +9,14 @@ WORKDIR /app
 
 # Copier les fichiers de configuration
 COPY package*.json ./
+COPY prisma ./prisma/
 
 # ===== DEPENDENCIES STAGE =====
 FROM base AS deps
+
+# Copier package.json et le schéma Prisma
+COPY package*.json ./
+COPY prisma ./prisma/
 
 # Installation des dépendances de production
 RUN npm ci --only=production && npm cache clean --force
