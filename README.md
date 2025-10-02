@@ -279,3 +279,38 @@ En production, assurez-vous de :
 - [ ] Sauvegardes régulières de la base de données
 - [ ] Monitoring des erreurs (Sentry)
 - [ ] Variables d'environnement sécurisées
+
+## 🗄️ Base de données et Prisma
+
+### Scripts disponibles
+
+```bash
+# Génération du client Prisma
+npm run db:generate
+
+# Développement local
+npm run db:migrate:dev  # Applique les migrations en mode développement
+npm run db:seed        # Peuple la base avec des données de test
+
+# Production/Déploiement
+npm run db:deploy      # Applique les migrations en production
+npm run start:prod     # Démarre l'app avec migrations et seeding automatique
+
+# Outils de développement
+npm run db:studio      # Interface graphique Prisma Studio
+npm run db:push        # Pousse le schéma sans migrations
+npm run db:reset       # Remet à zéro la base de données
+```
+
+### Configuration pour Dokploy
+
+Sur Dokploy, utilisez ces variables d'environnement :
+
+```env
+DATABASE_URL="postgresql://votre-username:votre-password@votre-host:5432/votre-db-name"
+ADMIN_EMAIL="admin@votredomaine.com"  
+ADMIN_PASSWORD="votre-password-admin-securise"
+```
+
+Le script `start:prod` s'occupera automatiquement des migrations et du seeding au démarrage.
+
