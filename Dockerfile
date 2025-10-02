@@ -2,8 +2,8 @@
 
 FROM node:20-alpine AS base
 
-# Installation des dépendances système pour Prisma
-RUN apk add --no-cache libc6-compat openssl
+# Installation des dépendances système pour Prisma et monitoring
+RUN apk add --no-cache libc6-compat openssl netcat-openbsd wget
 
 WORKDIR /app
 
@@ -36,6 +36,9 @@ COPY . .
 # Variables d'environnement
 ENV NODE_ENV=production
 
+# Générer le client Prisma
+RUN npx prisma generate
+
 # ===== PRODUCTION STAGE =====
 FROM base AS production
 
@@ -47,8 +50,10 @@ RUN adduser --system --uid 1001 express
 COPY --from=deps --chown=express:nodejs /app/node_modules ./node_modules
 COPY --from=build --chown=express:nodejs /app/ ./
 
-# Créer le dossier uploads
+# Créer le dossier uploads et copier les scripts
 RUN mkdir -p uploads && chown -R express:nodejs uploads
+COPY scripts/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh && chown express:nodejs /usr/local/bin/docker-entrypoint.sh
 
 USER express
 
@@ -60,4 +65,4 @@ ENV NODE_ENV=production
 # HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 #   CMD curl -f http://localhost:3001/api/health || exit 1
 
-CMD ["npm", "start"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
